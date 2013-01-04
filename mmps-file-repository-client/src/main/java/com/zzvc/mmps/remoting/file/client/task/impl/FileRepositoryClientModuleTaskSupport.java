@@ -33,20 +33,8 @@ abstract public class FileRepositoryClientModuleTaskSupport extends RemotingClie
 		String fileRelativePath = filePath + "/" + fileName;
 		
 		String fileRepositoryUrl = fileRepositoryHome + fileRelativePath;
-		InputStream is = null;
-		try {
-			FileObject fo = VFS.getManager().resolveFile(fileRepositoryUrl);
-			is = fo.getContent().getInputStream();
-		} catch (FileSystemException e) {
-			throw new FileRepositoryClientException("Cannot download file from '" + fileRepositoryUrl + "'", e);
-		}
-		
 		String localFilePath = clientHome + fileRelativePath;
-		try {
-			saveStreamToFile(is, new File(localFilePath));
-		} catch (IOException e) {
-			throw new FileRepositoryClientException("Cannot save file to '" + localFilePath + "'", e);
-		}
+		downloadFile(fileRepositoryUrl, localFilePath);
 		
 		return localFilePath;
 	}
@@ -54,6 +42,26 @@ abstract public class FileRepositoryClientModuleTaskSupport extends RemotingClie
 	protected boolean removeFile(String filePath) {
 		File file = new File(filePath);
 		return file.delete() && file.getParentFile().delete();
+	}
+	
+	private void downloadFile(String remoteUrl, String localPath) {
+		InputStream is = null;
+		long lastModifiedTime = 0;
+		try {
+			FileObject fo = VFS.getManager().resolveFile(remoteUrl);
+			is = fo.getContent().getInputStream();
+			lastModifiedTime = fo.getContent().getLastModifiedTime();
+		} catch (FileSystemException e) {
+			throw new FileRepositoryClientException("Cannot retrieve file from '" + remoteUrl + "'", e);
+		}
+		
+		File localFile = new File(localPath);
+		try {
+			saveStreamToFile(is, localFile);
+			localFile.setLastModified(lastModifiedTime);
+		} catch (IOException e) {
+			throw new FileRepositoryClientException("Cannot save file to '" + localPath + "'", e);
+		}
 	}
 	
 	private void saveStreamToFile(InputStream is, File file) throws IOException {
