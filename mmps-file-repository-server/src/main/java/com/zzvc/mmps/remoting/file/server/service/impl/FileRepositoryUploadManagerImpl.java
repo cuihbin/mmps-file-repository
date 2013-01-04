@@ -1,13 +1,16 @@
 package com.zzvc.mmps.remoting.file.server.service.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.ResourceBundle;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.VFS;
@@ -19,8 +22,7 @@ import com.zzvc.mmps.remoting.file.dao.FileRepositoryDao;
 import com.zzvc.mmps.remoting.file.model.FileRepository;
 import com.zzvc.mmps.remoting.file.server.service.FileRepositoryServerException;
 import com.zzvc.mmps.remoting.file.server.service.FileRepositoryUploadManager;
-import com.zzvc.mmps.remoting.file.server.service.HashEncoder;
-import com.zzvc.mmps.remoting.file.server.service.StreamFileWriter;
+import com.zzvc.mmps.remoting.file.writer.StreamFileWriter;
 
 public class FileRepositoryUploadManagerImpl implements FileRepositoryUploadManager, InitializingBean {
 	private Logger logger = Logger.getLogger(FileRepositoryUploadManagerImpl.class);
@@ -28,24 +30,13 @@ public class FileRepositoryUploadManagerImpl implements FileRepositoryUploadMana
 	@Resource
 	private FileRepositoryDao fileRepositoryDao;
 	
-	@Autowired(required=false)
+	@Autowired
 	private StreamFileWriter streamFileSaver;
-	
-	@Autowired(required=false)
-	private HashEncoder hashUtil;
 	
 	private String fileRepositoryLocalPath;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		if (streamFileSaver == null) {
-			streamFileSaver = new TransformStreamFileWriter();
-		}
-		
-		if (hashUtil == null) {
-			hashUtil = new Md5HashEncoder();
-		}
-		
 		try {
 			ResourceBundle bundle = ResourceBundle.getBundle("file-repository");
 			File localPath = new File(bundle.getString("file.repository.path.local"));
@@ -64,13 +55,16 @@ public class FileRepositoryUploadManagerImpl implements FileRepositoryUploadMana
 	public FileRepository uploadFile(String fileUrl) {
 		Date time = new Date();
 		String name = getFilename(fileUrl);
-		String path = hashUtil.encode(name, time);
+		
+		String path = getPath(name, time);
 		File localFile = getLocalFile(path, name);
 		
 		InputStream is = null;
+		long lastModifiedTime = 0;
 		try {
 			FileObject fo = VFS.getManager().resolveFile(fileUrl);
 			is = fo.getContent().getInputStream();
+			lastModifiedTime = fo.getContent().getLastModifiedTime();
 		} catch (FileSystemException e) {
 			logger.error("Cannot read file from '" + fileUrl + "'", e);
 			throw new FileRepositoryServerException("Cannot read file from '" + fileUrl + "'");
@@ -82,6 +76,7 @@ public class FileRepositoryUploadManagerImpl implements FileRepositoryUploadMana
 				throw new FileRepositoryServerException("Cannot create local file path '" + folder.getAbsolutePath() + "'");
 			}
 			streamFileSaver.saveFile(is, localFile);
+			localFile.setLastModified(lastModifiedTime);
 		} catch (IOException e) {
 			logger.error("Cannot read file from '" + fileUrl + "'", e);
 			throw new FileRepositoryServerException("Cannot save file from '" + fileUrl + "'");
@@ -118,6 +113,27 @@ public class FileRepositoryUploadManagerImpl implements FileRepositoryUploadMana
 			throw new FileRepositoryServerException("Cannot locate file repository local path");
 		}
 		return new File(fileRepositoryLocalPath + path + "/" + name);
+	}
+	
+	private String getPath(String name, Date time) {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try {
+			os.write(name.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			logger.error("Cannot create file path", e);
+			throw new FileRepositoryServerException("Cannot create file path", e);
+		} catch (IOException e) {
+			logger.error("Cannot create file path", e);
+			throw new FileRepositoryServerException("Cannot create file path", e);
+		}
+		
+		long l = time.getTime();
+		for (int i = 0; i < 4; i++) {
+			os.write((int) (l & 0xff));
+			l >>>= 8;
+		}
+		
+		return DigestUtils.md5Hex(os.toByteArray());
 	}
 
 }
