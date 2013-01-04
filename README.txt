@@ -1,0 +1,1 @@
+Extends mmps-remoting and provide file distribution functionality 
