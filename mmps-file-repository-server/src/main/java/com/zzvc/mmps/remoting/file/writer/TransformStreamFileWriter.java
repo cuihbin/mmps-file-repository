@@ -1,4 +1,4 @@
-package com.zzvc.mmps.remoting.file.server.service.impl;
+package com.zzvc.mmps.remoting.file.writer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-
-import com.zzvc.mmps.remoting.file.server.service.StreamFileWriter;
 
 public class TransformStreamFileWriter implements StreamFileWriter {
 

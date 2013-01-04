@@ -1,4 +1,4 @@
-package com.zzvc.mmps.remoting.file.server.service;
+package com.zzvc.mmps.remoting.file.writer;
 
 import java.io.File;
 import java.io.IOException;
