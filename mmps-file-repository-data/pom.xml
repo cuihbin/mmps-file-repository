@@ -18,4 +18,18 @@
       <version>${mmps-db.version}</version>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>data</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>hibernate3-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
