@@ -14,14 +14,14 @@
   <dependencies>
     <dependency>
       <groupId>com.zzvc.mmps</groupId>
-      <artifactId>mmps-scheduler</artifactId>
-      <version>${mmps-core.version}</version>
+      <artifactId>mmps-remoting-player-client</artifactId>
+      <version>${mmps-remoting.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.zzvc.mmps</groupId>
-      <artifactId>mmps-remoting-player-client</artifactId>
-      <version>${mmps-remoting.version}</version>
+      <artifactId>mmps-scheduler</artifactId>
+      <version>${mmps-core.version}</version>
     </dependency>
 
     <dependency>
