@@ -1,2 +1,2 @@
-mmps-file-repository-1.2.0-SNAPSHOT
- + Initial commit
+mmps-file-repository-2.0
+ + Improved repository client
