@@ -1,3 +1,4 @@
 mmps-file-repository-2.0
  + Improved repository client
  + Changed to mmps-parent 2.0.2
+ + Rename mmps-file-repository-server to mmps-file-repository-service
