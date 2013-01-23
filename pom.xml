@@ -28,6 +28,6 @@
   <modules>
     <module>mmps-file-repository-client</module>
     <module>mmps-file-repository-data</module>
-    <module>mmps-file-repository-server</module>
+    <module>mmps-file-repository-service</module>
   </modules>
 </project>

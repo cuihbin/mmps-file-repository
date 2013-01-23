@@ -9,8 +9,8 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>mmps-file-repository-server</artifactId>
-  <name>mmps-file-repository-server</name>
+  <artifactId>mmps-file-repository-service</artifactId>
+  <name>mmps-file-repository-service</name>
 
   <dependencies>
     <dependency>
