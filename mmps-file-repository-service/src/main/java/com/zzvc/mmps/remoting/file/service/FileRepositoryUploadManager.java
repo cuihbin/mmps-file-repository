@@ -1,4 +1,4 @@
-package com.zzvc.mmps.remoting.file.server.service;
+package com.zzvc.mmps.remoting.file.service;
 
 import com.zzvc.mmps.remoting.file.model.FileRepository;
 

@@ -1,4 +1,4 @@
-package com.zzvc.mmps.remoting.file.server.service.impl;
+package com.zzvc.mmps.remoting.file.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -21,8 +21,8 @@ import org.springframework.stereotype.Service;
 
 import com.zzvc.mmps.remoting.file.dao.FileRepositoryDao;
 import com.zzvc.mmps.remoting.file.model.FileRepository;
-import com.zzvc.mmps.remoting.file.server.service.FileRepositoryServerException;
-import com.zzvc.mmps.remoting.file.server.service.FileRepositoryUploadManager;
+import com.zzvc.mmps.remoting.file.service.FileRepositoryServerException;
+import com.zzvc.mmps.remoting.file.service.FileRepositoryUploadManager;
 import com.zzvc.mmps.remoting.file.writer.StreamFileWriter;
 
 @Service("fileRepositoryUploadManager")

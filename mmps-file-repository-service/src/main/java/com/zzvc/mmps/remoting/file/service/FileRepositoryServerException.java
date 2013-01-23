@@ -1,4 +1,4 @@
-package com.zzvc.mmps.remoting.file.server.service;
+package com.zzvc.mmps.remoting.file.service;
 
 public class FileRepositoryServerException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
