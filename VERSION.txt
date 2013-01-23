@@ -1,2 +1,3 @@
 mmps-file-repository-2.0
  + Improved repository client
+ + Changed to mmps-parent 2.0.2
