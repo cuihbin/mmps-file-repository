@@ -4,6 +4,4 @@
 
   <bean id="streamFileSaver" class="com.zzvc.mmps.remoting.file.writer.TransformStreamFileWriter" />
   
-  <bean id="fileRepositoryUploadManager" class="com.zzvc.mmps.remoting.file.server.service.impl.FileRepositoryUploadManagerImpl" />
-
 </beans>

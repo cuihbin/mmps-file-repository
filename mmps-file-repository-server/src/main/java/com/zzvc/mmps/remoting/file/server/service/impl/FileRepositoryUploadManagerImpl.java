@@ -17,6 +17,7 @@ import org.apache.commons.vfs2.VFS;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.zzvc.mmps.remoting.file.dao.FileRepositoryDao;
 import com.zzvc.mmps.remoting.file.model.FileRepository;
@@ -24,6 +25,7 @@ import com.zzvc.mmps.remoting.file.server.service.FileRepositoryServerException;
 import com.zzvc.mmps.remoting.file.server.service.FileRepositoryUploadManager;
 import com.zzvc.mmps.remoting.file.writer.StreamFileWriter;
 
+@Service("fileRepositoryUploadManager")
 public class FileRepositoryUploadManagerImpl implements FileRepositoryUploadManager, InitializingBean {
 	private Logger logger = Logger.getLogger(FileRepositoryUploadManagerImpl.class);
 	
